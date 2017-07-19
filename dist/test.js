@@ -39,6 +39,12 @@ timeBetweenChanges = (resultSet) => {
     return times;
 };
 
+getTravelTime = (resultSet) => {
+    let depart = new Date(resultSet[0].departureTime).valueOf();
+    let arrival = new Date(resultSet[resultSet.length - 1].arrivalTime).valueOf();
+    return new Date(arrival - depart);
+};
+
 runQuery = () => {
     planner.query({
         departureStop: "http://irail.be/stations/NMBS/008892007",
@@ -70,6 +76,7 @@ runQuery = () => {
             console.log("Total responses gotten: ", responseCount);
             console.log("Total changes: ", countChanges(path));
             console.log("Times between changes: ", timeBetweenChanges(path), " minutes");
+            console.log("Total travel time: ", getTravelTime(path).toLocaleTimeString());
         });
     });
 };
