@@ -1,9 +1,18 @@
 const Client = require("../lib/lc-client");
+const fs = require('fs');
 
 const entryPoints = {'entrypoints': ["http://belgium.linkedconnections.org/sncb/connections"]};
 const planner = new Client(entryPoints);
 const now = new Date();
 const inAnHour = new Date(now.valueOf() + 60 * 60 * 1000);
+
+logOutput = (path, content) => {
+    fs.writeFile(path, content, function (err) {
+        if (err) return console.log(err);
+
+        console.log(path, ' Logged.');
+    });
+}
 
 countChanges = (resultSet) => {
     let tripCount = 0;
@@ -55,7 +64,7 @@ runQuery = () => {
         });
         
         resultStream.once('result',  (path) => {
-            console.log(path);
+            logOutput("result.json", JSON.stringify(path));
             console.log("Total connections processed: ", dataCount);
             console.log("Total requests send: ", requestCount);
             console.log("Total responses gotten: ", responseCount);
