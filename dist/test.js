@@ -37,8 +37,14 @@ countChanges = (resultSet) => {
 timeBetweenChanges = (resultSet) => {
     let times = [];
     let lastConn = resultSet[0];
+    // Be able to handle both standards
+    tripKey = 'http://vocab.gtfs.org/terms#trip';
+    if (lastConn[tripKey]) {
+        tripKey = 'gtfs:trip';
+    }
+    // gtfs:trip
     for (let connection of resultSet) {
-        if (lastConn['http://vocab.gtfs.org/terms#trip'] !== connection['http://vocab.gtfs.org/terms#trip']) {
+        if (lastConn[tripKey] !== connection[tripKey]) {
             times.push((connection.departureTime - lastConn.arrivalTime) / 60000);
         }
         lastConn = connection;
