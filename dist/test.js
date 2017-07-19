@@ -5,6 +5,7 @@ const entryPoints = {'entrypoints': ["http://belgium.linkedconnections.org/sncb/
 const planner = new Client(entryPoints);
 const now = new Date();
 const inAnHour = new Date(now.valueOf() + 60 * 60 * 1000);
+console.log(now);
 
 logOutput = (path, content) => {
     fs.writeFile(path, content, function (err) {
@@ -47,11 +48,11 @@ getTravelTime = (resultSet) => {
 
 runQuery = () => {
     planner.query({
-        departureStop: "http://irail.be/stations/NMBS/008892007",
+        departureStop: "http://irail.be/stations/NMBS/008896800",
         arrivalStop: "http://irail.be/stations/NMBS/008812005",
         latestDepartTime: inAnHour,
         departureTime: now,
-        minimumTransferTime: 10
+        minimumTransferTime: 6
     }, (resultStream, source) => {
         let dataCount = 0;
         let requestCount = 0;
