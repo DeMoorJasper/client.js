@@ -17,9 +17,15 @@ logOutput = (path, content) => {
 
 countChanges = (resultSet) => {
     let tripCount = 0;
-    let lastTrip = resultSet[0]['http://vocab.gtfs.org/terms#trip'];
+    // Be able to handle both standards
+    tripKey = 'http://vocab.gtfs.org/terms#trip';
+    if (resultSet[0][tripKey]) {
+        tripKey = 'gtfs:trip';
+    }
+    // gtfs:trip
+    let lastTrip = resultSet[0][tripKey];
     for (let connection of resultSet) {
-        let currTrip = connection['http://vocab.gtfs.org/terms#trip'];
+        let currTrip = connection[tripKey];
         if (lastTrip !== currTrip) {
             tripCount++;
         }
