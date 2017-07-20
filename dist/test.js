@@ -64,7 +64,8 @@ runQuery = () => {
         arrivalStop: "http://irail.be/stations/NMBS/008812005",
         latestDepartTime: inAnHour,
         departureTime: now,
-        minimumTransferTime: 6
+        minimumTransferTime: 6,
+        searchTimeOut: 60000
     }, (resultStream, source) => {
         let dataCount = 0;
         let requestCount = 0;
