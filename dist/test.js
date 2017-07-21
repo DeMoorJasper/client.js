@@ -18,14 +18,10 @@ logOutput = (path, content) => {
 countChanges = (resultSet) => {
     let tripCount = 0;
     // Be able to handle both standards
-    tripKey = 'http://vocab.gtfs.org/terms#trip';
-    if (resultSet[0][tripKey]) {
-        tripKey = 'gtfs:trip';
-    }
     // gtfs:trip
-    let lastTrip = resultSet[0][tripKey];
+    let lastTrip = resultSet[0]["gtfs:trip"];
     for (let connection of resultSet) {
-        let currTrip = connection[tripKey];
+        let currTrip = connection["gtfs:trip"];
         if (lastTrip !== currTrip) {
             tripCount++;
         }
@@ -37,14 +33,8 @@ countChanges = (resultSet) => {
 timeBetweenChanges = (resultSet) => {
     let times = [];
     let lastConn = resultSet[0];
-    // Be able to handle both standards
-    tripKey = 'http://vocab.gtfs.org/terms#trip';
-    if (lastConn[tripKey]) {
-        tripKey = 'gtfs:trip';
-    }
-    // gtfs:trip
     for (let connection of resultSet) {
-        if (lastConn[tripKey] !== connection[tripKey]) {
+        if (lastConn["gtfs:trip"] !== connection["gtfs:trip"]) {
             times.push((connection.departureTime - lastConn.arrivalTime) / 60000);
         }
         lastConn = connection;
