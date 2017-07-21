@@ -3,9 +3,13 @@ const fs = require('fs');
 
 const entryPoints = {'entrypoints': ["http://belgium.linkedconnections.org/sncb/connections"]};
 const planner = new Client(entryPoints);
-const now = new Date();
+// const now = new Date(new Date().valueOf());
+const now = new Date("2017-07-21T18:34:17+02:00");
 const inAnHour = new Date(now.valueOf() + 60 * 60 * 1000);
-console.log(now);
+
+console.log(now.toLocaleDateString());
+console.log(now.toLocaleTimeString());
+console.log(inAnHour.toLocaleTimeString());
 
 logOutput = (path, content) => {
     fs.writeFile(path, content, function (err) {
@@ -17,8 +21,6 @@ logOutput = (path, content) => {
 
 countChanges = (resultSet) => {
     let tripCount = 0;
-    // Be able to handle both standards
-    // gtfs:trip
     let lastTrip = resultSet[0]["gtfs:trip"];
     for (let connection of resultSet) {
         let currTrip = connection["gtfs:trip"];
@@ -49,8 +51,16 @@ getTravelTime = (resultSet) => {
 };
 
 runQuery = () => {
+    let resultItem = {
+        queriedTime: now.toLocaleTimeString(),
+        count: 0,
+        routes: {}
+    };
+
+    // Run timespan query
+    // TODO: Make this actually output multiple possibilities instead of the last one
     planner.timespanQuery({
-        departureStop: "http://irail.be/stations/NMBS/008896800",
+        departureStop: "http://irail.be/stations/NMBS/008892007",
         arrivalStop: "http://irail.be/stations/NMBS/008812005",
         latestDepartTime: inAnHour,
         departureTime: now,
@@ -72,15 +82,33 @@ runQuery = () => {
         resultStream.on('data', (data) => {
             dataCount++;
         });
-        
+
         resultStream.on('result',  (path) => {
-            logOutput("result.json", JSON.stringify(path));
+            resultItem.count++;
+            resultItem.routes[new Date(path[0]["departureTime"]).toLocaleTimeString()] = new Date(path[path.length - 1]["arrivalTime"]).toLocaleTimeString();
+            // logOutput("result.json", JSON.stringify(path));
+            logOutput("result.json", JSON.stringify(resultItem));
+            console.log("Depart time: ", new Date(path[0]["departureTime"]).toLocaleTimeString());
             console.log("Total connections processed: ", dataCount);
             console.log("Total requests send: ", requestCount);
             console.log("Total responses gotten: ", responseCount);
             console.log("Total changes: ", countChanges(path));
             console.log("Times between changes: ", timeBetweenChanges(path), " minutes");
             console.log("Total travel time: ", getTravelTime(path).toLocaleTimeString());
+        });
+    });
+
+    // Run single query
+    planner.query({
+        departureStop: "http://irail.be/stations/NMBS/008892007",
+        arrivalStop: "http://irail.be/stations/NMBS/008812005",
+        latestDepartTime: inAnHour,
+        departureTime: now,
+        minimumTransferTime: 6,
+        searchTimeOut: 60000
+    }, (resultStream, source) => {
+        resultStream.on('result',  (path) => {
+            resultItem.routes[new Date(path[0]["departureTime"]).toLocaleTimeString()] = new Date(path[path.length - 1]["arrivalTime"]).toLocaleTimeString();
         });
     });
 };
