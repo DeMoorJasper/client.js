@@ -49,7 +49,7 @@ getTravelTime = (resultSet) => {
 };
 
 runQuery = () => {
-    planner.query({
+    planner.timespanQuery({
         departureStop: "http://irail.be/stations/NMBS/008896800",
         arrivalStop: "http://irail.be/stations/NMBS/008812005",
         latestDepartTime: inAnHour,
