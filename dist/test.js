@@ -73,7 +73,7 @@ runQuery = () => {
             dataCount++;
         });
         
-        resultStream.once('result',  (path) => {
+        resultStream.on('result',  (path) => {
             logOutput("result.json", JSON.stringify(path));
             console.log("Total connections processed: ", dataCount);
             console.log("Total requests send: ", requestCount);
