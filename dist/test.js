@@ -51,6 +51,9 @@ getTravelTime = (resultSet) => {
 };
 
 runQuery = () => {
+    let departureStop = "http://irail.be/stations/NMBS/008812005";
+    let arrivalStop = "http://irail.be/stations/NMBS/008892007";
+
     let resultItem = {
         queriedTime: now.toLocaleTimeString(),
         count: 0,
@@ -60,8 +63,8 @@ runQuery = () => {
     // Run timespan query
     // TODO: Make this actually output multiple possibilities instead of the last one
     planner.timespanQuery({
-        departureStop: "http://irail.be/stations/NMBS/008892007",
-        arrivalStop: "http://irail.be/stations/NMBS/008812005",
+        departureStop: departureStop,
+        arrivalStop: arrivalStop,
         latestDepartTime: inAnHour,
         departureTime: now,
         minimumTransferTime: 6,
@@ -85,9 +88,15 @@ runQuery = () => {
 
         resultStream.on('result',  (path) => {
             resultItem.count++;
-            resultItem.routes[new Date(path[0]["departureTime"]).toLocaleTimeString()] = new Date(path[path.length - 1]["arrivalTime"]).toLocaleTimeString();
+            resultItem.routes[new Date(path[0]["departureTime"]).toLocaleTimeString()] = {
+                arrival: new Date(path[path.length - 1]["arrivalTime"]).toLocaleTimeString(),
+                changes: timeBetweenChanges(path),
+                type: "timespanCSA",
+                path: "path" + resultItem.count
+            };
             // logOutput("result.json", JSON.stringify(path));
             logOutput("result.json", JSON.stringify(resultItem));
+            logOutput("path" + resultItem.count + ".json", JSON.stringify(path));
             console.log("Depart time: ", new Date(path[0]["departureTime"]).toLocaleTimeString());
             console.log("Total connections processed: ", dataCount);
             console.log("Total requests send: ", requestCount);
@@ -100,15 +109,22 @@ runQuery = () => {
 
     // Run single query
     planner.query({
-        departureStop: "http://irail.be/stations/NMBS/008892007",
-        arrivalStop: "http://irail.be/stations/NMBS/008812005",
+        departureStop: departureStop,
+        arrivalStop: arrivalStop,
         latestDepartTime: inAnHour,
         departureTime: now,
         minimumTransferTime: 6,
         searchTimeOut: 60000
     }, (resultStream, source) => {
+        resultItem.count++;
         resultStream.on('result',  (path) => {
-            resultItem.routes[new Date(path[0]["departureTime"]).toLocaleTimeString()] = new Date(path[path.length - 1]["arrivalTime"]).toLocaleTimeString();
+            resultItem.routes[new Date(path[0]["departureTime"]).toLocaleTimeString()] = {
+                arrival: new Date(path[path.length - 1]["arrivalTime"]).toLocaleTimeString(),
+                changes: timeBetweenChanges(path),
+                type: "standardCSA"
+            };
+            logOutput("result.json", JSON.stringify(resultItem));
+            logOutput("path" + resultItem.count + ".json", JSON.stringify(path));
         });
     });
 };
