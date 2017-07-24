@@ -1,6 +1,6 @@
 {
     "queriedTime": "18:34:17",
-    "count": 16,
+    "count": 14,
     "routes": {
         "18:37:00": {
             "arrival": "19:35:00",
@@ -11,25 +11,26 @@
             "type": "standardCSA"
         },
         "18:38:00": {
-            "arrival": "19:20:00",
+            "arrival": "19:35:00",
             "changes": [
-                3
+                12,
+                7
             ],
             "type": "timespanCSA",
             "path": "path3"
-        },
-        "18:42:00": {
-            "arrival": "19:20:00",
-            "changes": [
-                1
-            ],
-            "type": "timespanCSA",
-            "path": "path4"
         },
         "18:49:00": {
             "arrival": "19:35:00",
             "changes": [
                 7
+            ],
+            "type": "timespanCSA",
+            "path": "path4"
+        },
+        "18:42:00": {
+            "arrival": "19:35:00",
+            "changes": [
+                14
             ],
             "type": "timespanCSA",
             "path": "path5"
@@ -42,15 +43,6 @@
             "type": "timespanCSA",
             "path": "path6"
         },
-        "18:45:00": {
-            "arrival": "19:35:00",
-            "changes": [
-                5,
-                7
-            ],
-            "type": "timespanCSA",
-            "path": "path7"
-        },
         "18:40:00": {
             "arrival": "19:35:00",
             "changes": [
@@ -58,13 +50,19 @@
                 7
             ],
             "type": "timespanCSA",
-            "path": "path8"
+            "path": "path7"
         },
         "18:52:00": {
             "arrival": "19:35:00",
+            "changes": [],
+            "type": "timespanCSA",
+            "path": "path8"
+        },
+        "18:45:00": {
+            "arrival": "19:50:00",
             "changes": [
-                1,
-                4
+                8,
+                21
             ],
             "type": "timespanCSA",
             "path": "path9"
@@ -87,29 +85,10 @@
         "19:04:00": {
             "arrival": "19:50:00",
             "changes": [
-                2,
-                7
-            ],
-            "type": "timespanCSA",
-            "path": "path12"
-        },
-        "19:06:00": {
-            "arrival": "19:50:00",
-            "changes": [
-                1,
-                2,
                 6
             ],
             "type": "timespanCSA",
-            "path": "path13"
-        },
-        "19:07:00": {
-            "arrival": "19:50:00",
-            "changes": [
-                2
-            ],
-            "type": "timespanCSA",
-            "path": "path14"
+            "path": "path12"
         },
         "19:01:00": {
             "arrival": "19:50:00",
@@ -117,15 +96,16 @@
                 8
             ],
             "type": "timespanCSA",
-            "path": "path15"
+            "path": "path13"
         },
-        "19:19:00": {
+        "19:06:00": {
             "arrival": "20:20:00",
             "changes": [
+                13,
                 24
             ],
             "type": "timespanCSA",
-            "path": "path16"
+            "path": "path14"
         }
     }
 }

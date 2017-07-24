@@ -67,7 +67,7 @@ runQuery = () => {
         arrivalStop: arrivalStop,
         latestDepartTime: inAnHour,
         departureTime: now,
-        minimumTransferTime: 6,
+        minimumTransferTime: 6 * 60,
         searchTimeOut: 60000
     }, (resultStream, source) => {
         let dataCount = 0;
